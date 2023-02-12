@@ -1,0 +1,25 @@
+press number keys to change the currently display value.
+each subsequent number press should concatenate.
+
+
+when an operater key is pressed, some actions are to happen:
+    1. the currently displayed value  -> an array of stored values.push
+    2. the selected operator
+    3. new number presses will not concatenate the current display value,
+       instead, they will create a new display value (and concatenate on this new string).
+
+
+when the equals sign is pressed:
+    1. check if there are 2 values in the stored values array
+        if there is 
+            {pass the currently selected operator and splice the stored values array to the operate function}
+        else
+            {return}
+    2. the returned value from the operate function should be pushed into the stored value array
+    3. the value of the stored value array[0] should be displayed
+    4. new number presses should not concat the currently displayed value. they should create a new display value
+
+
+the operate function will take the current operator (ie '+') and the stored values array as arguments
+
+depending on the operator, the function will send the array to the approripate operation function (ie the add function) 
