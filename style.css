@@ -74,8 +74,8 @@ select {
 }
 
 body {
-    /* display: grid;
-    place-items: center; */
+    display: grid;
+    place-items: center;
     background-color: gray;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
