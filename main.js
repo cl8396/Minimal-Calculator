@@ -1,26 +1,62 @@
 const numberButtons = document.querySelectorAll('.number-btn');
 const display = document.querySelector('.calculator__display');
-let inputValue = [];
+const addButton = document.querySelector('.calculator__add');
+const equalsButton = document.querySelector('.calculator__equals')
+
+
+let inputValue = "";
+let selectedOperator = "";
+let storedValues = [];
+
+
 
 numberButtons.forEach(function(elem) {
     elem.addEventListener('click', updateInputValue);
 })
 
 function updateInputValue(e){
-    inputValue.push(e.target.value);
-    updateDisplay(inputValue.join(""));
-    console.log(parseInt(inputValue.join("")));
+    inputValue += (e.target.value);
+    updateDisplay(inputValue);
 }
 
 function updateDisplay(string){
     display.textContent = string;
 }
-function add(a, b){
-        return a + b; 
+
+function storeCurrentValue(){ //store currently displayed value
+    if (inputValue) {
+        storedValues.push(parseInt(inputValue));
+    }
+    inputValue = "";
+}
+
+addButton.addEventListener('click', () => {
+    
+    storeCurrentValue();
+    selectedOperator = "+";
+
+    if (storedValues.length === 2) {
+        let result = operate(selectedOperator, storedValues);
+        storedValues = [result];
+        updateDisplay(result.toString());
     }
 
-function subtract(a, b){
-        return a - b;
+
+})
+
+equalsButton.addEventListener('click', () => {
+    storeCurrentValue();
+    let result = operate(selectedOperator, storedValues);
+    storedValues = [result];
+    updateDisplay(result.toString());
+})
+
+function add(array){
+        return array.reduce((accu, num) => accu + num); 
+    }
+
+function subtract(array){
+        return array.reduce((accu, num) => accu - num);
     }
 
 function divide(a, b){
@@ -31,16 +67,16 @@ function multiply(a, b){
         return a * b;
     }
 
-function operate(operator, a, b){
+function operate(operator, array){
     switch(operator){
         case '+':
-            add(a, b);
-        case '-':
-            subtract(a, b);
-        case '*':
-            multiply(a, b);
-        case '/':
-            divide(a, b);
+            return (add(array));
+        // case '-':
+        //     subtract(a, b);
+        // case '*':
+        //     multiply(a, b);
+        // case '/':
+        //     divide(a, b);
     }
 }
 

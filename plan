@@ -3,10 +3,12 @@ each subsequent number press should concatenate.
 
 
 when an operater key is pressed, some actions are to happen:
-    1. the currently displayed value  -> an array of stored values.push
-    2. the selected operator
+    1. the currently displayed value  -> an array of stored values
+    2. the selected operator is stored in a variable
     3. new number presses will not concatenate the current display value,
        instead, they will create a new display value (and concatenate on this new string).
+
+    IF the stored array.length == 2 then run the code that the equals button calls
 
 
 when the equals sign is pressed:
