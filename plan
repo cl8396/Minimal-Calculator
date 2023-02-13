@@ -25,3 +25,8 @@ when the equals sign is pressed:
 the operate function will take the current operator (ie '+') and the stored values array as arguments
 
 depending on the operator, the function will send the array to the approripate operation function (ie the add function) 
+
+
+BUG:
+
+when chaining operator buttons, the most recent press will use the new operator to calculate the previous value (which should have been calculated already with the previously selected operator)
