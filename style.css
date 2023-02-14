@@ -5,7 +5,7 @@
   --clr-neutral-400: hsl(39, 38%, 90%);
   --clr-neutral-500: hsl(39, 35%, 85%);
   --clr-neutral-900: hsl(226, 95%, 17%);
-
+  --clr-neutral-900-alpha: hsla(226, 95%, 17%, 0.85);
   --clr-primary-500: hsl(257, 50%, 65%);
   --clr-primary-600: hsl(248, 73%, 59%);
   --clr-primary-700: hsl(226, 94%, 32%);
@@ -132,8 +132,7 @@ body {
   justify-content: flex-end;
   align-items: center;
   min-height: 100px;
-  color: var(--clr-primary-600);
-  color: var(--clr-neutral-900);
+  color: var(--clr-neutral-900-alpha);
   grid-column-end: span 4;
   font-size: 3rem;
   font-weight: 500;
