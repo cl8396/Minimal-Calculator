@@ -143,6 +143,11 @@ body {
   box-shadow: inset 8px 8px 30px #d7cebf, inset -8px -8px 30px #f7eedb;
 }
 
+.calculator > .calculator__C:disabled {
+  color: var(--clr-neutral-300);
+  cursor: not-allowed;
+}
+
 .calculator > .calculator__equals {
   grid-column-end: span 2;
 }

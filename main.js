@@ -8,11 +8,18 @@ const display = document.querySelector(".calculator__display");
 const equalsButton = document.querySelector(".calculator__equals");
 const operatorButtons = document.querySelectorAll(".operator-btn");
 const allClearButton = document.querySelector(".calculator__AC");
-const clearButton = document.querySelector(".calculator__C")
+const clearButton = document.querySelector(".calculator__C");
 
 let inputValue = "";
 let selectedOperator = "";
 let storedValues = [];
+
+
+
+
+initCalculator();
+
+
 
 allClearButton.addEventListener("click", initCalculator);
 
@@ -67,6 +74,7 @@ function generateResult() {
 
 function clearInputValue() {
   inputValue = "";
+  disableClearButton();
 }
 
 function updateInputValue(e) {
@@ -75,6 +83,10 @@ function updateInputValue(e) {
     updateDisplay(inputValue);
   } else {
     alert("Maximum digits reached.");
+  }
+
+  if (inputValue.length > 0) {
+    enableClearButton();
   }
 }
 
@@ -137,16 +149,25 @@ function operate(operator, array) {
 
 function initCalculator() {
   clearInputValue();
+  disableClearButton();
   selectedOperator = "";
   storedValues = [];
   updateDisplay("");
 }
 
+function enableClearButton() {
+  clearButton.disabled = false;
+}
+
+function disableClearButton() {
+  clearButton.disabled = true;
+}
+
 function removeLastCharacter() {
-  if (inputValue) {
-    console.log(`remove last character code running`)
-    inputValue = inputValue.slice(0, inputValue.length - 1);
-    updateDisplay(inputValue);  
+  inputValue = inputValue.slice(0, inputValue.length - 1);
+  updateDisplay(inputValue);
+
+  if (inputValue === "") {
+    disableClearButton();
   }
-  
 }
