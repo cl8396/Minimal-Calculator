@@ -1,10 +1,7 @@
 const numberButtons = document.querySelectorAll(".number-btn");
 const decimalPointButton = document.querySelector(".calculator__decimal-point");
 const display = document.querySelector(".calculator__display");
-// const addButton = document.querySelector('.calculator__add');
-// const subtractButton = document.querySelector('.calculator__subtract');
-// const multiplyButton = document.querySelector('.calculator__multiply');
-// const divideButton = document.querySelector('.calculator__divide');
+
 const equalsButton = document.querySelector(".calculator__equals");
 const operatorButtons = document.querySelectorAll(".operator-btn");
 const allClearButton = document.querySelector(".calculator__AC");
