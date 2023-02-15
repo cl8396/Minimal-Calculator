@@ -8,12 +8,15 @@ const display = document.querySelector(".calculator__display");
 const equalsButton = document.querySelector(".calculator__equals");
 const operatorButtons = document.querySelectorAll(".operator-btn");
 const allClearButton = document.querySelector(".calculator__AC");
+const clearButton = document.querySelector(".calculator__C")
 
 let inputValue = "";
 let selectedOperator = "";
 let storedValues = [];
 
 allClearButton.addEventListener("click", initCalculator);
+
+clearButton.addEventListener("click", removeLastCharacter);
 
 numberButtons.forEach(function (elem) {
   elem.addEventListener("click", updateInputValue);
@@ -136,5 +139,14 @@ function initCalculator() {
   clearInputValue();
   selectedOperator = "";
   storedValues = [];
-  updateDisplay();
+  updateDisplay("");
+}
+
+function removeLastCharacter() {
+  if (inputValue) {
+    console.log(`remove last character code running`)
+    inputValue = inputValue.slice(0, inputValue.length - 1);
+    updateDisplay(inputValue);  
+  }
+  
 }
