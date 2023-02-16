@@ -11,19 +11,42 @@ let inputValue = "";
 let selectedOperator = "";
 let storedValues = [];
 
-
-
-
 initCalculator();
 
+document.addEventListener("keydown", (e) => {
+  const numberKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  const operatorKeys = ["*", "+", "-", "/"];
 
+  if (operatorKeys.includes(e.key)) {
+    switch(e.key){
+      case "+":
+        operatorPressed("+");
+        break;
+      case "-":
+        operatorPressed("-");
+        break;
+      case "*":
+        operatorPressed("*");
+        break;
+      case "/":
+        operatorPressed("/");
+        break;
+    }  
+  }
+  
+  if (numberKeys.includes(e.key)) {
+    updateInputValue(e.key);
+  }
+});
 
 allClearButton.addEventListener("click", initCalculator);
 
 clearButton.addEventListener("click", removeLastCharacter);
 
 numberButtons.forEach(function (elem) {
-  elem.addEventListener("click", updateInputValue);
+  elem.addEventListener("click", (e) => {
+    updateInputValue(e.target.value);
+  });
 });
 
 decimalPointButton.addEventListener("click", (e) => {
@@ -32,20 +55,24 @@ decimalPointButton.addEventListener("click", (e) => {
   }
 });
 
+function operatorPressed(operator) {
+  storeInputValue();
+  clearInputValue();
+
+  if (storedValues.length === 2) {
+    console.log(
+      `result is about to be generated. selected operator: ${selectedOperator} stored values: ${storedValues}`
+    );
+    generateResult();
+  }
+
+  selectedOperator = operator;
+  console.log(selectedOperator);
+}
+
 operatorButtons.forEach(function (elem) {
   elem.addEventListener("click", (e) => {
-    storeInputValue();
-    clearInputValue();
-
-    if (storedValues.length === 2) {
-      console.log(
-        `result is about to be generated. selected operator: ${selectedOperator} stored values: ${storedValues}`
-      );
-      generateResult();
-    }
-
-    selectedOperator = e.target.value;
-    console.log(selectedOperator);
+    operatorPressed(e.target.value);
   });
 });
 
@@ -74,9 +101,9 @@ function clearInputValue() {
   disableClearButton();
 }
 
-function updateInputValue(e) {
+function updateInputValue(inputChar) {
   if (inputValue.length < 30) {
-    inputValue += e.target.value;
+    inputValue += inputChar;
     updateDisplay(inputValue);
   } else {
     alert("Maximum digits reached.");
