@@ -15,25 +15,40 @@ initCalculator();
 
 document.addEventListener("keydown", (e) => {
   const numberKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-  const operatorKeys = ["*", "+", "-", "/"];
 
-  if (operatorKeys.includes(e.key)) {
-    switch(e.key){
-      case "+":
-        operatorPressed("+");
-        break;
-      case "-":
-        operatorPressed("-");
-        break;
-      case "*":
-        operatorPressed("*");
-        break;
-      case "/":
-        operatorPressed("/");
-        break;
-    }  
+  switch (e.key) {
+    case "+":
+      setOperator("+");
+      startOperation();
+      break;
+    case "-":
+      setOperator("-");
+      startOperation();
+      break;
+    case "*":
+      setOperator("*");
+      startOperation();
+      break;
+    case "/":
+      setOperator("/");
+      startOperation();
+      break;
+    case "Enter":
+    case "=":
+      startOperation();
+      break;
+    case "Backspace":
+      if (isClearEnabled()) {
+        removeLastCharacter();  
+      }
+      break;
+    case ".":
+      if (!inputValue.includes(".")) {
+        updateInputValue(".");
+      }
+      break;
   }
-  
+
   if (numberKeys.includes(e.key)) {
     updateInputValue(e.key);
   }
@@ -55,45 +70,53 @@ decimalPointButton.addEventListener("click", (e) => {
   }
 });
 
-function operatorPressed(operator) {
-  storeInputValue();
-  clearInputValue();
-
-  if (storedValues.length === 2) {
-    console.log(
-      `result is about to be generated. selected operator: ${selectedOperator} stored values: ${storedValues}`
-    );
-    generateResult();
-  }
-
+function setOperator(operator) {
   selectedOperator = operator;
   console.log(selectedOperator);
 }
 
-operatorButtons.forEach(function (elem) {
-  elem.addEventListener("click", (e) => {
-    operatorPressed(e.target.value);
-  });
-});
+function shouldCalculate() {
+  return (storedValues.length === 2);
+}
 
-equalsButton.addEventListener("click", () => {
+function startOperation() {
   storeInputValue();
   clearInputValue();
-
-  if (selectedOperator && storedValues.length == 2) {
-    console.log(
-      `result is about to be generated. selected operator: ${selectedOperator} entered values: ${storedValues}`
-    );
-    generateResult();
+  
+  if (shouldCalculate()) {
+    updateDisplay(getResult());
   }
+}
+
+function handleOperatorClick(e) {
+  setOperator(e.target.value);
+  startOperation();
+}
+
+function handleEqualsClick() {
+  startOperation();
+}
+
+operatorButtons.forEach(function (elem) {
+  elem.addEventListener("click", handleOperatorClick);
 });
 
-function generateResult() {
+equalsButton.addEventListener("click", handleEqualsClick);
+
+function getResult() {
+  console.log(
+    `result is about to be generated. selected operator: ${selectedOperator} stored values: ${storedValues}`
+  );
+
   let result = operate(selectedOperator, storedValues);
+
   console.log(`unrounded result: ${result}`);
-  storedValues = [result];
+
+  storedValues = [result]; //init stored values with the result
+
   result = Math.round(result * 1000000) / 1000000; //rounds long decimals to six places
-  updateDisplay(result.toString());
+
+  return (result.toString());
 }
 
 function clearInputValue() {
@@ -185,6 +208,10 @@ function enableClearButton() {
 
 function disableClearButton() {
   clearButton.disabled = true;
+}
+
+function isClearEnabled() {
+  return (!clearButton.disabled);
 }
 
 function removeLastCharacter() {
