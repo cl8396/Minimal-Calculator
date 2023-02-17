@@ -3,6 +3,7 @@ const decimalPointButton = document.querySelector(".calculator__decimal-point");
 const display = document.querySelector(".calculator__display");
 
 const equalsButton = document.querySelector(".calculator__equals");
+const percentButton = document.querySelector(".calculator__percentage")
 const operatorButtons = document.querySelectorAll(".operator-btn");
 const allClearButton = document.querySelector(".calculator__AC");
 const clearButton = document.querySelector(".calculator__C");
@@ -11,9 +12,18 @@ let inputValue = "";
 let selectedOperator = "";
 let storedValues = [];
 
+
 initCalculator();
 
-document.addEventListener("keydown", (e) => {
+operatorButtons.forEach(function (elem) {
+  elem.addEventListener("click", handleOperatorClick);
+});
+
+equalsButton.addEventListener("click", handleEqualsClick);
+percentButton.addEventListener("click", handlePercentClick);
+document.addEventListener("keydown", handleKeyboardInput);
+
+function handleKeyboardInput(e) {
   const numberKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
   switch (e.key) {
@@ -52,7 +62,9 @@ document.addEventListener("keydown", (e) => {
   if (numberKeys.includes(e.key)) {
     updateInputValue(e.key);
   }
-});
+};
+
+
 
 allClearButton.addEventListener("click", initCalculator);
 
@@ -84,6 +96,7 @@ function startOperation() {
   clearInputValue();
   
   if (shouldCalculate()) {
+    console.log('yes should operate');
     updateDisplay(getResult());
   }
 }
@@ -97,11 +110,12 @@ function handleEqualsClick() {
   startOperation();
 }
 
-operatorButtons.forEach(function (elem) {
-  elem.addEventListener("click", handleOperatorClick);
-});
+function handlePercentClick(){
+  setIsPercentage(true);
+  startOperation();
+  setIsPercentage(false);
+}
 
-equalsButton.addEventListener("click", handleEqualsClick);
 
 function getResult() {
   console.log(
@@ -155,9 +169,22 @@ function updateDisplay(string) {
 
 function storeInputValue() {
   //store currently displayed value in an array
+  if (isPercentage == true && inputValue && storedValues.length == 1) {
+    storedValues.push(parseFloat(getPercentage()));
+    console.log(`just pushed the percentage`);
+  }
+  
+  console.log(storedValues);
+
   if (inputValue) {
     storedValues.push(parseFloat(inputValue));
   }
+}
+
+function getPercentage(){
+  console.log(parseFloat(inputValue));
+  console.log(storedValues[[0]]);
+ return
 }
 
 function add(array) {
@@ -212,6 +239,10 @@ function disableClearButton() {
 
 function isClearEnabled() {
   return (!clearButton.disabled);
+}
+
+function setIsPercentage(boolean) {
+  boolean === true ? isPercentage = true : isPercentage = false;
 }
 
 function removeLastCharacter() {
