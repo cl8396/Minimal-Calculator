@@ -19,9 +19,21 @@ operatorButtons.forEach(function (elem) {
   elem.addEventListener("click", handleOperatorClick);
 });
 
+numberButtons.forEach(function (elem) {
+  elem.addEventListener("click", appendNumber);
+});
+
+decimalPointButton.addEventListener("click", (e) => {
+  if (!inputValue.includes(".")) {
+    updateInputValue(e);
+  }
+});
+
+
 equalsButton.addEventListener("click", handleEqualsClick);
-percentButton.addEventListener("click", handlePercentClick);
 document.addEventListener("keydown", handleKeyboardInput);
+allClearButton.addEventListener("click", initCalculator);
+clearButton.addEventListener("click", removeLastCharacter);
 
 function handleKeyboardInput(e) {
   const numberKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -66,21 +78,6 @@ function handleKeyboardInput(e) {
 
 
 
-allClearButton.addEventListener("click", initCalculator);
-
-clearButton.addEventListener("click", removeLastCharacter);
-
-numberButtons.forEach(function (elem) {
-  elem.addEventListener("click", (e) => {
-    updateInputValue(e.target.value);
-  });
-});
-
-decimalPointButton.addEventListener("click", (e) => {
-  if (!inputValue.includes(".")) {
-    updateInputValue(e);
-  }
-});
 
 function setOperator(operator) {
   selectedOperator = operator;
@@ -110,13 +107,6 @@ function handleEqualsClick() {
   startOperation();
 }
 
-function handlePercentClick(){
-  setIsPercentage(true);
-  startOperation();
-  setIsPercentage(false);
-}
-
-
 function getResult() {
   console.log(
     `result is about to be generated. selected operator: ${selectedOperator} stored values: ${storedValues}`
@@ -138,9 +128,9 @@ function clearInputValue() {
   disableClearButton();
 }
 
-function updateInputValue(inputChar) {
+function appendNumber(e) {
   if (inputValue.length < 30) {
-    inputValue += inputChar;
+    inputValue += e.target.value;
     updateDisplay(inputValue);
   } else {
     alert("Maximum digits reached.");
@@ -169,22 +159,9 @@ function updateDisplay(string) {
 
 function storeInputValue() {
   //store currently displayed value in an array
-  if (isPercentage == true && inputValue && storedValues.length == 1) {
-    storedValues.push(parseFloat(getPercentage()));
-    console.log(`just pushed the percentage`);
-  }
-  
-  console.log(storedValues);
-
   if (inputValue) {
     storedValues.push(parseFloat(inputValue));
   }
-}
-
-function getPercentage(){
-  console.log(parseFloat(inputValue));
-  console.log(storedValues[[0]]);
- return
 }
 
 function add(array) {
@@ -239,10 +216,6 @@ function disableClearButton() {
 
 function isClearEnabled() {
   return (!clearButton.disabled);
-}
-
-function setIsPercentage(boolean) {
-  boolean === true ? isPercentage = true : isPercentage = false;
 }
 
 function removeLastCharacter() {
