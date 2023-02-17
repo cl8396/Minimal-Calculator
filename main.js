@@ -98,16 +98,12 @@ function handleEqualsClick() {
 }
 
 function getResult() {
-  console.log(
-    `result is about to be generated. selected operator: ${selectedOperator} stored values: ${storedValues}`
-  );
-
-  let result = operate(selectedOperator, storedValues);
+  let result = operate(selectedOperator);
   console.log(`unrounded result: ${result}`);
   storedValues = [result]; //init stored values with the result
-  result = Math.round(result * 1000000) / 1000000; //rounds long decimals to six places
 
-  return result.toString();
+  return roundNumber(result)
+         .toString();
 }
 
 function clearInputValue() {
@@ -219,4 +215,8 @@ function removeLastCharacter() {
   if (inputValue === "") {
     disableClearButton();
   }
+}
+
+roundNumber(num) { 
+  return Math.round(num * 1000000) / 1000000;
 }
