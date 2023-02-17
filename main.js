@@ -3,7 +3,7 @@ const decimalPointButton = document.querySelector(".calculator__decimal-point");
 const display = document.querySelector(".calculator__display");
 
 const equalsButton = document.querySelector(".calculator__equals");
-const percentButton = document.querySelector(".calculator__percentage")
+const percentButton = document.querySelector(".calculator__percentage");
 const operatorButtons = document.querySelectorAll(".operator-btn");
 const allClearButton = document.querySelector(".calculator__AC");
 const clearButton = document.querySelector(".calculator__C");
@@ -11,7 +11,6 @@ const clearButton = document.querySelector(".calculator__C");
 let inputValue = "";
 let selectedOperator = "";
 let storedValues = [];
-
 
 initCalculator();
 
@@ -23,12 +22,7 @@ numberButtons.forEach(function (elem) {
   elem.addEventListener("click", appendNumber);
 });
 
-decimalPointButton.addEventListener("click", (e) => {
-  if (!inputValue.includes(".")) {
-    updateInputValue(e);
-  }
-});
-
+decimalPointButton.addEventListener("click", appendDecimal);
 
 equalsButton.addEventListener("click", handleEqualsClick);
 document.addEventListener("keydown", handleKeyboardInput);
@@ -61,7 +55,7 @@ function handleKeyboardInput(e) {
       break;
     case "Backspace":
       if (isClearEnabled()) {
-        removeLastCharacter();  
+        removeLastCharacter();
       }
       break;
     case ".":
@@ -74,10 +68,7 @@ function handleKeyboardInput(e) {
   if (numberKeys.includes(e.key)) {
     updateInputValue(e.key);
   }
-};
-
-
-
+}
 
 function setOperator(operator) {
   selectedOperator = operator;
@@ -85,15 +76,14 @@ function setOperator(operator) {
 }
 
 function shouldCalculate() {
-  return (storedValues.length === 2);
+  return storedValues.length === 2;
 }
 
 function startOperation() {
   storeInputValue();
   clearInputValue();
-  
+
   if (shouldCalculate()) {
-    console.log('yes should operate');
     updateDisplay(getResult());
   }
 }
@@ -113,14 +103,11 @@ function getResult() {
   );
 
   let result = operate(selectedOperator, storedValues);
-
   console.log(`unrounded result: ${result}`);
-
   storedValues = [result]; //init stored values with the result
-
   result = Math.round(result * 1000000) / 1000000; //rounds long decimals to six places
 
-  return (result.toString());
+  return result.toString();
 }
 
 function clearInputValue() {
@@ -138,6 +125,13 @@ function appendNumber(e) {
 
   if (inputValue.length > 0) {
     enableClearButton();
+  }
+}
+
+function appendDecimal(e) {
+  if (!inputValue.includes(".")) {
+    inputValue += e.target.value;
+    updateDisplay(inputValue);
   }
 }
 
@@ -164,37 +158,37 @@ function storeInputValue() {
   }
 }
 
-function add(array) {
-  return array.reduce((accu, num) => accu + num);
+function add(a, b) {
+  return a + b;
 }
 
-function subtract(array) {
-  return array.reduce((accu, num) => accu - num);
+function subtract(a, b) {
+  return a - b;
 }
 
-function divide(array) {
-  if (array[1] === 0) {
+function divide(a, b) {
+  if (b === 0) {
     alert(`No dividing by 0.`);
     alert(`EVER.`);
-    return array[0];
+    return array[a];
   }
-  return array.reduce((accu, num) => accu / num);
+  return a / b;
 }
 
-function multiply(array) {
-  return array.reduce((accu, num) => accu * num);
+function multiply(a, b) {
+  return a * b;
 }
 
-function operate(operator, array) {
+function operate(operator) {
   switch (operator) {
     case "+":
-      return add(array);
+      return add(...storedValues);
     case "-":
-      return subtract(array);
+      return subtract(...storedValues);
     case "*":
-      return multiply(array);
+      return multiply(...storedValues);
     case "/":
-      return divide(array);
+      return divide(...storedValues);
   }
 }
 
@@ -215,7 +209,7 @@ function disableClearButton() {
 }
 
 function isClearEnabled() {
-  return (!clearButton.disabled);
+  return !clearButton.disabled;
 }
 
 function removeLastCharacter() {
