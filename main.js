@@ -10,7 +10,7 @@ const clearButton = document.querySelector(".calculator__C");
 
 let inputValue = "";
 let selectedOperator = "";
-let storedValues = [];
+let operands = [];
 
 initCalculator();
 
@@ -19,11 +19,10 @@ operatorButtons.forEach(function (elem) {
 });
 
 numberButtons.forEach(function (elem) {
-  elem.addEventListener("click", appendNumber);
+  elem.addEventListener("click", (e) => appendNumber(e.target.value));
 });
 
 decimalPointButton.addEventListener("click", appendDecimal);
-
 equalsButton.addEventListener("click", handleEqualsClick);
 document.addEventListener("keydown", handleKeyboardInput);
 allClearButton.addEventListener("click", initCalculator);
@@ -59,24 +58,21 @@ function handleKeyboardInput(e) {
       }
       break;
     case ".":
-      if (!inputValue.includes(".")) {
-        updateInputValue(".");
-      }
+      appendDecimal();
       break;
   }
 
   if (numberKeys.includes(e.key)) {
-    updateInputValue(e.key);
+    appendNumber(e.key);
   }
 }
 
 function setOperator(operator) {
   selectedOperator = operator;
-  console.log(selectedOperator);
 }
 
 function shouldCalculate() {
-  return storedValues.length === 2;
+  return (operands.length === 2);
 }
 
 function startOperation() {
@@ -99,11 +95,23 @@ function handleEqualsClick() {
 
 function getResult() {
   let result = operate(selectedOperator);
-  console.log(`unrounded result: ${result}`);
-  storedValues = [result]; //init stored values with the result
+  operands = [result]; //init stored values with the result
 
   return roundNumber(result)
          .toString();
+}
+
+function operate(operator) {
+  switch (operator) {
+    case "+":
+      return add(...operands);
+    case "-":
+      return subtract(...operands);
+    case "*":
+      return multiply(...operands);
+    case "/":
+      return divide(...operands);
+  }
 }
 
 function clearInputValue() {
@@ -111,9 +119,9 @@ function clearInputValue() {
   disableClearButton();
 }
 
-function appendNumber(e) {
+function appendNumber(number) {
   if (inputValue.length < 30) {
-    inputValue += e.target.value;
+    inputValue += number;
     updateDisplay(inputValue);
   } else {
     alert("Maximum digits reached.");
@@ -124,9 +132,9 @@ function appendNumber(e) {
   }
 }
 
-function appendDecimal(e) {
+function appendDecimal() {
   if (!inputValue.includes(".")) {
-    inputValue += e.target.value;
+    inputValue += ".";
     updateDisplay(inputValue);
   }
 }
@@ -148,11 +156,12 @@ function updateDisplay(string) {
 }
 
 function storeInputValue() {
-  //store currently displayed value in an array
+  //store currently displayed value in operands array
   if (inputValue) {
-    storedValues.push(parseFloat(inputValue));
+    operands.push(parseFloat(inputValue));
   }
 }
+
 
 function add(a, b) {
   return a + b;
@@ -175,24 +184,11 @@ function multiply(a, b) {
   return a * b;
 }
 
-function operate(operator) {
-  switch (operator) {
-    case "+":
-      return add(...storedValues);
-    case "-":
-      return subtract(...storedValues);
-    case "*":
-      return multiply(...storedValues);
-    case "/":
-      return divide(...storedValues);
-  }
-}
-
 function initCalculator() {
   clearInputValue();
   disableClearButton();
   selectedOperator = "";
-  storedValues = [];
+  operands = [];
   updateDisplay("");
 }
 
@@ -217,6 +213,6 @@ function removeLastCharacter() {
   }
 }
 
-roundNumber(num) { 
+function roundNumber(num) {
   return Math.round(num * 1000000) / 1000000;
 }
